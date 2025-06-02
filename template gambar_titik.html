@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Praktek_Komgraf</title>
+  <style>
+    #canvas1 {
+      border: 2px solid black;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas1" width="400" height="400"></canvas>
+
+  <script src="lib/grafika_lib.js"></script>
+  <script>
+    const canvasKita = document.getElementById("canvas1");
+    const ctx = canvasKita.getContext("2d");
+    const imageData = ctx.getImageData(0, 0, canvasKita.width, canvasKita.height);
+
+    // Segi empat merah (di kiri)
+    const pointsMerah = [
+        {x: 100, y: 100},
+        {x: 150, y: 100},
+        {x: 150, y: 150},
+        {x: 100, y: 200}
+    ];
+
+    // Segi empat hijau (di kanan)
+    const pointsHijau = [
+        {x: 200, y: 100},
+        {x: 250, y: 100},
+        {x: 250, y: 150},
+        {x: 200, y: 200}
+    ];
+
+    // Gambar outline
+    polygon(imageData, pointsMerah, 255, 0, 0); // Merah
+    polygon(imageData, pointsHijau, 0, 255, 0); // Hijau
+
+    // Ambil warna latar belakang (putih default) di titik dalam segi empat
+    function ambilWarna(x, y) {
+      const index = 4 * (x + y * canvasKita.width);
+      return {
+        r: imageData.data[index],
+        g: imageData.data[index + 1],
+        b: imageData.data[index + 2]
+      };
+    }
+
+    // Isi segi empat merah
+    const warnaLatarMerah = ambilWarna(125, 130);
+    floodFill(imageData, canvasKita, 125, 130, warnaLatarMerah, {r: 255, g: 0, b: 0});
+
+    // Isi segi empat hijau
+    const warnaLatarHijau = ambilWarna(225, 130);
+    floodFill(imageData, canvasKita, 225, 130, warnaLatarHijau, {r: 0, g: 255, b: 0});
+
+    ctx.putImageData(imageData, 0, 0);
+  </script>
+</body>
+</html>

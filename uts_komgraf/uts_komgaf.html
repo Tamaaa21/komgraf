@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>UTS (23215055)</title>
+</head>
+<body>
+  <h3><b>NIM: 23215055 | Nama: Feldi Sanjaya</b></h3>
+  <canvas id="canvasKita" width="400" height="400" style="border:1px solid black;"></canvas>
+
+  <script>
+    const canvasKita = document.getElementById("canvasKita");
+    const ctx = canvasKita.getContext("2d");
+
+    // Background putih
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, canvasKita.width, canvasKita.height);
+
+    ctx.lineWidth = 1; // Ketebalan garis
+
+    for (let y = 40; y <= 360; y += 80) {
+      for (let x = 40; x <= 360; x += 80) {
+        // Elips horizontal (biru)
+        ctx.beginPath();
+        ctx.strokeStyle = "blue";
+        ctx.ellipse(x, y, 40, 15, 0, 0, 2 * Math.PI);
+        ctx.stroke();
+
+        // Elips vertikal (merah)
+        ctx.beginPath();
+        ctx.strokeStyle = "red";
+        ctx.ellipse(x, y, 15, 40, 0, 0, 2 * Math.PI);
+        ctx.stroke();
+      }
+    }
+  </script>
+</body>
+</html>
