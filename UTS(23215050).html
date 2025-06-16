@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>UTS(23215050)</title>
+    <style>
+      body {
+        text-align: left;
+        font-family: Arial, sans-serif;
+      }
+      canvas {
+        border: 2px solid black;
+        display: block;
+        margin-left: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <p>NIM: 23215050 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Nama: Eko Saputro</p>
+    <canvas id="canvas1" width="400" height="400"></canvas>
+
+    <script>
+          var canvas = document.getElementById("canvas1");
+          var ctx = canvas.getContext("2d");
+          var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+          function gambar_titik(imageData, x, y, r, g, b) {
+              if (x >= 0 && x < canvas.width && y >= 0 && y < canvas.height) {
+                  var index = 4 * (x + y * canvas.width);
+                  imageData.data[index + 0] = r;
+                  imageData.data[index + 1] = g;
+                  imageData.data[index + 2] = b;
+                  imageData.data[index + 3] = 255;
+              }
+          }
+
+          function gambar_elips(imageData, xc, yc, rx, ry, r, g, b) {
+              for (let teta = 0; teta <= 2 * Math.PI; teta += 0.01) {
+                  let x = xc + rx * Math.cos(teta);
+                  let y = yc + ry * Math.sin(teta);
+                  gambar_titik(imageData, Math.round(x), Math.round(y), r, g, b);
+              }
+          }
+
+          function polygon(imageData, point_array, r, g, b) {
+      var point = point_array[0];
+
+      for (var i=1;(point_array.length); i++) {
+          var point_2 = point_array[i];
+          dda_line(imageData, point.x, point.y, point_2.x, point_2.y, r, g, b);
+          point = point_2;
+              }
+              dda_line(imageData, point.x, point.y, point_array[0].x, point_array[0].y, r, g, b);
+          }
+
+          // Grid pola 5x5
+          for (let i = 0; i < 5; i++) {
+              for (let j = 0; j < 5; j++) {
+                  let xc = 40 + j * 80;
+                  let yc = 40 + i * 80;
+
+                  // Gambar elips horizontal (biru)
+                  gambar_elips(imageData, xc, yc, 40, 15, 0, 0, 255);
+
+                  // Gambar elips vertikal (merah)
+                  gambar_elips(imageData, xc, yc, 15, 40, 255, 0, 0);
+              }
+          }
+
+          ctx.putImageData(imageData, 0, 0);
+    </script>
+  </body>
+</html>

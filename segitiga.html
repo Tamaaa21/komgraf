@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Polygon Drawing</title>
+</head>
+<body>
+<canvas id="myCanvas" width="400" height="400"></canvas>
+<script>
+function setPixel(imageData, x, y, r, g, b, a=255) {
+        let index = (Math.round(x) + Math.round(y) * imageData.width) * 4;
+        imageData.data[index] = r;
+        imageData.data[index+1] = g;
+        imageData.data[index+2] = b;
+        imageData.data[index+3] = a;
+}
+
+function dda_line(imageData, x1, y1, x2, y2, r, g, b) {
+        let dx = x2 - x1;
+        let dy = y2 - y1;
+        let steps = Math.max(Math.abs(dx), Math.abs(dy));
+        let xInc = dx / steps;
+        let yInc = dy / steps;
+        let x = x1, y = y1;
+        for (let i = 0; i <= steps; i++) {
+                setPixel(imageData, x, y, r, g, b);
+                x += xInc;
+                y += yInc;
+        }
+}
+
+function polygon(imageData, point_array, r, g, b) {
+        var point = point_array[0];
+        for (var i = 1; i < point_array.length; i++) {
+                var point_2 = point_array[i];
+                dda_line(imageData, point.x, point.y, point_2.x, point_2.y, r, g, b);
+                point = point_2;
+        }
+        dda_line(imageData, point.x, point.y, point_array[0].x, point_array[0].y, r, g, b);
+}
+function floodFill(imageData, canvas, x, y, toFlood, Color) {
+var index = 4*(x + y * canvas.width);
+
+var r1 = imageData.data[index];
+var g1 = imageData.data[index + 1];
+var b1 = imageData.data[index + 2];
+
+if ((r1 == toFlood.r) && (g1 == toFlood.g) && (b1 == toFlood.b)) {
+    imageData.data[index] = Color.r;
+    imageData.data[index + 1] = Color.g;
+    imageData.data[index + 2] = Color.b;
+    imageData.data[index + 3] = 255;
+    floodFill(imageData, canvas, x + 1, y, toFlood, Color);
+    floodFill(imageData, canvas, x , y+ 1, toFlood, Color);
+    floodFill(imageData, canvas, x - 1, y, toFlood, Color);
+    floodFill(imageData, canvas, x , y - 1, toFlood, Color);
+        }
+}
+function translasi(titik_lama, T) {
+
+var x_baru = titik_lama.x + T.x;
+var y_baru = titik_lama.y + T.y;
+
+  return {x:x_baru, y:y_baru};
+
+}
+function skala(titik_lama, S){
+    var x_baru = titik_lama.x * S.x;
+     var y_baru = titik_lama.y * S.y;
+
+     return {x:x_baru, y:y_baru};
+}
+function rotasi(titik_lama, sudut) {
+    var x_baru = titik_lama.x * Math.cos(sudut) - titik_lama.y * Math.sin(sudut);
+    var y_baru = titik_lama.x * Math.sin(sudut) + titik_lama.y * Math.cos(sudut);
+
+    return {x:x_baru, y:y_baru};
+}
+
+const canvas = document.getElementById('myCanvas');
+const ctx = canvas.getContext('2d');
+var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+
+
+// DRAW OBJECT
+var point_array = [
+    {x:100,y:100},
+    {x:150,y:150},
+    {x:50,y:150},
+];
+
+polygon(imageData, point_array, 255,0,0);
+
+// var point_array2 = [];
+// var ubah = skala(point_array[0],{x:2,y:2});
+// point_array2.push(ubah);
+// ubah = skala(point_array[1],{x:2,y:2});
+// point_array2.push(ubah);
+// ubah = skala(point_array[2],{x:2,y:2});
+// point_array2.push(ubah);
+
+// polygon(imageData, point_array2, 0,255,0);
+
+// ctx.putImageData(imageData,0,0);
+var point_array2 = [];
+var putar = rotasi(point_array[0],Math.PI/8);
+point_array2.push(putar);
+putar = rotasi(point_array[1],Math.PI/8);
+point_array2.push(putar);
+putar = rotasi(point_array[2],Math.PI/8);
+point_array2.push(putar);
+
+polygon(imageData, point_array2, 0,255,0);
+
+ctx.putImageData(imageData,0,0);
+
+</script>
+</body>
+</html>

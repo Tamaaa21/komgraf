@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pixel Persegi panjang biru</title>
+</head>
+<body>
+  <canvas id="kanvas" width="500" height="400" style="border:1px solid #000000;"></canvas>
+
+  <script>
+    const canvaskita = document.getElementById('kanvas');
+    const ctx = canvaskita.getContext('2d');
+
+    function gambarTitik(x, y, warna) {
+      ctx.fillStyle = warna;
+      ctx.fillRect(x, y, 1, 1);
+    }
+
+    function gambarPersegiDariTitik(x1, y1, x2, y2) {
+      for (let y = y1; y <= y2; y++) {
+        for (let x = x1; x <= x2; x++) {
+          gambarTitik(x, y, 'blue');
+        }
+      }
+    }
+
+    gambarPersegiDariTitik(150, 100, 250, 300);
+  </script>
+  <h1>Tugas Komputer Grafik</h1>
+  <h2>Nama:Eko Saputro
+    <br>NIM: 23215050
+    <br>Prodi: Teknik Informatika Pagi
+    <br>Semester: 4
+  </h2>
+</body>
+</html>

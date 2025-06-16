@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+<html lang="id">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Grafik Koordinat 1 sampai 20</title>
+
+    <style>
+
+        canvas {
+
+            border: 1px solid black;
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <canvas id="myCanvas" width="400" height="400"></canvas>
+
+    <script>
+
+        const canvas = document.getElementById('myCanvas');
+
+        const ctx = canvas.getContext('2d');
+
+
+        // Menggambar sumbu X dan Y
+
+        ctx.beginPath();
+
+        ctx.moveTo(50, 350); // Sumbu X
+
+        ctx.lineTo(350, 350);
+
+        ctx.moveTo(50, 350); // Sumbu Y
+
+        ctx.lineTo(50, 50);
+
+        ctx.stroke();
+
+
+        // Menggambar titik koordinat dari (1,1) sampai (20,20)
+
+        for (let i = 1; i <= 20; i++) {
+
+            const x = 50 + (i * 15);
+
+            const y = 350 - (i * 15);
+
+            ctx.beginPath();
+
+            ctx.arc(x, y, 3, 0, Math.PI * 2); // Menggambar titik
+
+            ctx.fill();
+
+
+            // Menambahkan tanda "+" di setiap titik
+
+            ctx.fillText('+', x - 5, y + 5); // Menulis tanda "+" di titik
+
+        }
+
+    </script>
+
+</body>
+
+</html>

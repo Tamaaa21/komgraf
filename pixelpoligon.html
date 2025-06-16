@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Polygon Drawing</title>
+</head>
+<body>
+<canvas id="myCanvas" width="400" height="400"></canvas>
+<script>
+function setPixel(imageData, x, y, r, g, b, a=255) {
+        let index = (Math.round(x) + Math.round(y) * imageData.width) * 4;
+        imageData.data[index] = r;
+        imageData.data[index+1] = g;
+        imageData.data[index+2] = b;
+        imageData.data[index+3] = a;
+}
+
+function dda_line(imageData, x1, y1, x2, y2, r, g, b) {
+        let dx = x2 - x1;
+        let dy = y2 - y1;
+        let steps = Math.max(Math.abs(dx), Math.abs(dy));
+        let xInc = dx / steps;
+        let yInc = dy / steps;
+        let x = x1, y = y1;
+        for (let i = 0; i <= steps; i++) {
+                setPixel(imageData, x, y, r, g, b);
+                x += xInc;
+                y += yInc;
+        }
+}
+
+function polygon(imageData, point_array, r, g, b) {
+        var point = point_array[0];
+        for (var i = 1; i < point_array.length; i++) {
+                var point_2 = point_array[i];
+                dda_line(imageData, point.x, point.y, point_2.x, point_2.y, r, g, b);
+                point = point_2;
+        }
+        dda_line(imageData, point.x, point.y, point_array[0].x, point_array[0].y, r, g, b);
+}
+function floodFill(imageData, canvas, x, y, toFlood, Color) {
+var index = 4*(x + y * canvas.width);
+
+var r1 = imageData.data[index];
+var g1 = imageData.data[index + 1];
+var b1 = imageData.data[index + 2];
+
+if ((r1 == toFlood.r) && (g1 == toFlood.g) && (b1 == toFlood.b)) {
+    imageData.data[index] = Color.r;
+    imageData.data[index + 1] = Color.g;
+    imageData.data[index + 2] = Color.b;
+    imageData.data[index + 3] = 255;
+    floodFill(imageData, canvas, x + 1, y, toFlood, Color);
+    floodFill(imageData, canvas, x , y+ 1, toFlood, Color);
+    floodFill(imageData, canvas, x - 1, y, toFlood, Color);
+    floodFill(imageData, canvas, x , y - 1, toFlood, Color);
+        }
+}
+
+const canvas = document.getElementById('myCanvas');
+const ctx = canvas.getContext('2d');
+var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+var points_array = [
+        {x: 100, y: 100},
+        {x: 150, y: 100},
+        {x: 150, y: 150},
+        {x: 100, y: 200},
+];
+
+polygon(imageData, points_array, 255, 0, 0);
+
+var points_array2 = [
+    {x: 160, y: 100},
+    {x: 210, y: 100},
+    {x: 210, y: 150},
+    {x: 160, y: 200},
+];
+polygon(imageData, points_array2, 0, 255, 0);
+var points_array3 = [
+    {x: 260, y: 100},
+    {x: 310, y: 100},
+    {x: 310, y: 150},
+    {x: 260, y: 200},
+];
+polygon(imageData, points_array3, 0, 0, 255);
+floodFill(imageData, canvas, 110, 110, {r: 0, g: 0, b: 0}, {r: 255, g: 0, b: 0});
+floodFill(imageData, canvas, 110, 110, {r: 0, g: 0, b: 0}, {r: 255, g: 0, b: 0});
+
+ctx.putImageData(imageData, 0, 0);
+</script>
+</body>
+</html>
